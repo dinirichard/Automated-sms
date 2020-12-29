@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "auth-c20ed": {
+      "hosting": {
+        "Automated-texting": [
+          "auth-c20ed"
+        ]
+      }
+    }
+  }
+}
