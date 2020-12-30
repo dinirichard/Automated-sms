@@ -10,13 +10,18 @@
 		"test": "echo \"No tests yet...\""
 	},
 	"dependencies": {
+		"@google-cloud/local-auth": "^1.0.0",
 		"dotenv": "^8.2.0",
-		"mongoose": "^5.11.9"
+		"express": "^4.17.1",
+		"googleapis": "^66.0.0",
+		"mongoose": "^5.11.9",
+		"server-destroy": "^1.0.1"
 	},
 	"devDependencies": {
 		"@azure/functions": "^1.0.2-beta2",
 		"@types/dotenv": "^8.2.0",
 		"@types/node": "^14.14.16",
+		"rxjs": "^6.6.3",
 		"typescript": "^3.3.3"
 	}
 }

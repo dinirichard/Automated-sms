@@ -30,29 +30,47 @@ export class UserService {
 	}
 
 	async postUser(context: Context) {
-		const existingUser = this.getUser(context);
+		await connect()
+			.then(() => context.log('Connection to CosmosDB successful'))
+			.catch((err) =>
+				context.log(err, 'Connection to CosmosDB NOT successful')
+			);
+		const existingUser = await this.getUser(context);
 
-		if (!existingUser) {
-			const originalUser = {
-				uid: context.req.body.uid,
+		if (existingUser === null) {
+			const newUser = new User({
 				email: context.req.body.email,
 				name: context.req.body.name,
 				firstName: context.req.body.firstName,
 				lastName: context.req.body.lastName,
 				photoUrl: context.req.body.photoUrl
-			};
-			const hero = new User(originalUser);
-			await hero.save((error) => {
-				if (this.checkServerError(context, error)) return;
-				context.res.status(201).json(hero);
-				context.log('User created successfully!');
 			});
+
+			const response = await newUser
+				.save()
+				.then((user) => {
+					context.res = {
+						status: 201,
+						data: user
+					};
+					context.log('User created successfully!', user);
+					return user;
+				})
+				.catch((err) => {
+					return this.checkServerError(context, err);
+				});
 		} else {
 			context.log('User is already registered!');
+			return existingUser;
 		}
 	}
 
 	async putUser(context: Context) {
+		await connect()
+			.then(() => context.log('Connection to CosmosDB successful'))
+			.catch((err) =>
+				context.log(err, 'Connection to CosmosDB NOT successful')
+			);
 		const originalHero = {
 			uid: parseInt(context.req.params.uid, 10),
 			name: context.req.body.name,
@@ -73,6 +91,11 @@ export class UserService {
 	}
 
 	async deleteUser(context: Context) {
+		await connect()
+			.then(() => context.log('Connection to CosmosDB successful'))
+			.catch((err) =>
+				context.log(err, 'Connection to CosmosDB NOT successful')
+			);
 		const uid = parseInt(context.req.params.uid, 10);
 		await User.findOneAndRemove({ uid: uid })
 			.then((hero) => {
@@ -88,30 +111,39 @@ export class UserService {
 	async getUser(context: Context) {
 		const docquery = User.findOne({ email: context.req.body.email });
 
-		await docquery
+		const response = await docquery
 			.exec()
 			.then((user) => {
 				return user;
 			})
 			.catch((error) => {
-				context.res.status(500).send(error);
-				return;
+				context.res = {
+					status: 500,
+					body: error
+				};
+				return null;
 			});
-		return null;
+		return response;
 	}
 
 	checkServerError(context: Context, error) {
 		if (error) {
-			context.res.status(500).send(error);
+			context.res = {
+				status: 500,
+				body: error
+			};
 			return error;
 		}
 	}
 
-	checkFound(context: Context, hero) {
-		if (!hero) {
-			context.res.status(404).send('Hero not found.');
+	checkFound(context: Context, user) {
+		if (!user) {
+			context.res = {
+				status: 404,
+				body: 'User not found.'
+			};
 			return;
 		}
-		return hero;
+		return user;
 	}
 }

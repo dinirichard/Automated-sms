@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { switchMap } from 'rxjs/operators';
 import {
   GoogleLoginProvider,
@@ -25,7 +24,6 @@ export class AuthService {
   user: SocialUser;
 
   constructor(
-    private afAuth: AngularFireAuth,
     private authService: SocialAuthService,
     private toastr: ToastrService,
     private smsService: SmsService
@@ -61,13 +59,13 @@ export class AuthService {
     // return of(this.user);
   }
 
-  // signOut(): void {
-  //   this.authService.signOut();
-  // }
+  signOut(): void {
+    this.authService.signOut();
+  }
 
-  // refreshToken(): void {
-  //   this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
-  // }
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
 
   getAuthState() {
     this.authService.authState.subscribe((user) => {
@@ -85,7 +83,7 @@ export class AuthService {
   //   );
   // }
 
-  logout(): Observable<void> {
-    return from(this.afAuth.signOut());
-  }
+  // logout(): Observable<void> {
+  //   return from(this.afAuth.signOut());
+  // }
 }

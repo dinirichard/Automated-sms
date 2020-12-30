@@ -8,6 +8,9 @@ export const environment = {
     '541656524796-6qaf231al2errjj4hk1op383vng3fmep.apps.googleusercontent.com',
   GoogleLoginClientSecret: 'KlOk-WSuClZ_1ICA6-W2KHCH',
   PORT: 4200,
+  GooglePeopleApiClientId:
+    '633865152740-05f0je70c2qqkspcha5ks8v72bjek04p.apps.googleusercontent.com',
+  GooglePeopleApiSecret: 'X0pY2Qdsw-vy7oxvFMJ6xQlU',
 };
 
 /*

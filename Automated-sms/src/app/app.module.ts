@@ -16,7 +16,7 @@ import { GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from '../environments/environment';
 
 const googleLoginOptions = {
-  scope: 'profile email openid',
+  scope: 'profile email openid contacts contacts-other',
 };
 
 @NgModule({

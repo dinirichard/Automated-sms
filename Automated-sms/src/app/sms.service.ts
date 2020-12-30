@@ -11,7 +11,7 @@ export class SmsService {
   constructor(private http: HttpClient) {}
 
   getUser(): Observable<User> {
-    return this.http.get<User>(`${this.api}/user`);
+    return this.http.get<User>(`${this.api}/users`);
   }
 
   saveUser(user: User): Observable<any> {
