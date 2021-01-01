@@ -1,11 +1,14 @@
 import { AzureFunction, Context, HttpRequest } from '@azure/functions';
 
 import * as path from 'path';
-import { google } from 'googleapis';
+import { google, people_v1 } from 'googleapis';
 import { authenticate } from '@google-cloud/local-auth';
 import { of } from 'rxjs';
+import { Contact, transformContactData } from '../shared/models/contact';
 
 const people = google.people('v1');
+
+let contacts: Contact[];
 
 const httpTrigger: AzureFunction = async function (
 	context: Context,
@@ -15,13 +18,7 @@ const httpTrigger: AzureFunction = async function (
 	// Obtain user credentials to use for the request
 	context.log(path.join(__dirname, '..', '..', 'shared', 'oauth2.keys.json'));
 	const auth = await authenticate({
-		keyfilePath: path.join(
-			__dirname,
-			'..',
-			'..',
-			'shared',
-			'oauth2.keys.json'
-		),
+		keyfilePath: path.join(__dirname, '..', '..', 'shared', 'oauth2.keys.json'),
 		scopes: ['https://www.googleapis.com/auth/contacts.readonly']
 	});
 	// context.res {
@@ -32,7 +29,8 @@ const httpTrigger: AzureFunction = async function (
 	// List all user connections / contacts
 	// https://developers.google.com/people/api/rest/v1/people.connections
 	let totalPeople;
-	const connections = await people.people.connections
+	let connections;
+	await people.people.connections
 		.list({
 			pageSize: 1000,
 			resourceName: 'people/me',
@@ -42,7 +40,8 @@ const httpTrigger: AzureFunction = async function (
 		})
 		.then((response) => {
 			totalPeople = response.data.totalPeople;
-			return response.data.connections;
+			connections = response.data.connections as people_v1.Schema$Person[];
+			return connections;
 		})
 		.catch((err) => {
 			context.res = {
@@ -55,14 +54,16 @@ const httpTrigger: AzureFunction = async function (
 			});
 		});
 
+	contacts = transformContactData(connections);
+
 	context.res = {
 		status: 200 /* Defaults to 200 */,
-		body: connections
+		body: contacts
 	};
 
-	context.log("\n\nUser's Connections:\n", connections);
-	// connections.b.forEach((c) => context.log(c));
-	return of(connections);
+	// context.log("\n\nUser's Connections:\n", connections);
+	contacts.forEach((c) => context.log(c));
+	return of(contacts);
 };
 
 export default httpTrigger;

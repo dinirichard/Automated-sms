@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './app-firebase/login/login.component';
 import { ToastrModule } from 'ngx-toastr';
+import { MaterialModule } from './material/material.module';
 
 import {
   SocialLoginModule,
@@ -14,13 +15,14 @@ import {
 } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from '../environments/environment';
+import { AppSetupComponent } from './app-firebase/app-setup/app-setup.component';
 
 const googleLoginOptions = {
   scope: 'profile email openid contacts contacts-other',
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, AppSetupComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -32,6 +34,7 @@ const googleLoginOptions = {
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
+    MaterialModule,
   ],
   providers: [
     {

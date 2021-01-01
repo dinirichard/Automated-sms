@@ -1,5 +1,6 @@
 import { Context } from '@azure/functions';
-import { User } from '../models/user.model';
+import { Observable } from 'rxjs';
+import { User, UserDoc } from '../models/user.model';
 import { connect } from '../mongo';
 
 export class UserService {
@@ -9,9 +10,7 @@ export class UserService {
 		context.log('PORT === ', process.env.PORT);
 		await connect()
 			.then(() => context.log('Connection to CosmosDB successful'))
-			.catch((err) =>
-				context.log(err, 'Connection to CosmosDB NOT successful')
-			);
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
 		const docquery = User.find({});
 		await docquery
 			.exec()
@@ -32,9 +31,7 @@ export class UserService {
 	async postUser(context: Context) {
 		await connect()
 			.then(() => context.log('Connection to CosmosDB successful'))
-			.catch((err) =>
-				context.log(err, 'Connection to CosmosDB NOT successful')
-			);
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
 		const existingUser = await this.getUser(context);
 
 		if (existingUser === null) {
@@ -68,9 +65,7 @@ export class UserService {
 	async putUser(context: Context) {
 		await connect()
 			.then(() => context.log('Connection to CosmosDB successful'))
-			.catch((err) =>
-				context.log(err, 'Connection to CosmosDB NOT successful')
-			);
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
 		const originalHero = {
 			uid: parseInt(context.req.params.uid, 10),
 			name: context.req.body.name,
@@ -93,9 +88,7 @@ export class UserService {
 	async deleteUser(context: Context) {
 		await connect()
 			.then(() => context.log('Connection to CosmosDB successful'))
-			.catch((err) =>
-				context.log(err, 'Connection to CosmosDB NOT successful')
-			);
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
 		const uid = parseInt(context.req.params.uid, 10);
 		await User.findOneAndRemove({ uid: uid })
 			.then((hero) => {
@@ -108,12 +101,12 @@ export class UserService {
 			});
 	}
 
-	async getUser(context: Context) {
+	async getUser(context: Context): Promise<UserDoc> {
 		const docquery = User.findOne({ email: context.req.body.email });
 
 		const response = await docquery
 			.exec()
-			.then((user) => {
+			.then((user: UserDoc) => {
 				return user;
 			})
 			.catch((error) => {

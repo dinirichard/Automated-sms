@@ -6,7 +6,7 @@
 			"direction": "in",
 			"name": "req",
 			"methods": ["get", "post"],
-			"route": "get-contacts"
+			"route": "contacts-get"
 		},
 		{
 			"type": "http",
@@ -14,5 +14,5 @@
 			"name": "res"
 		}
 	],
-	"scriptFile": "../dist/get-contacts/index.js"
+	"scriptFile": "../dist/contacts-get/index.js"
 }
