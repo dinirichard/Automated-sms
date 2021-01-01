@@ -1,0 +1,11 @@
+{
+	"bindings": [
+		{
+			"type": "activityTrigger",
+			"direction": "in",
+			"name": "context"
+		}
+	],
+	"scriptFile": "../dist/GetGoogleContacts/index.js",
+	"disabled": false
+}

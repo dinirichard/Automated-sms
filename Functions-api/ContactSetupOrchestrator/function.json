@@ -1,0 +1,11 @@
+{
+	"bindings": [
+		{
+			"type": "orchestrationTrigger",
+			"direction": "in",
+			"name": "context"
+		}
+	],
+	"scriptFile": "../dist/ContactSetupOrchestrator/index.js",
+	"disabled": false
+}

@@ -1,0 +1,31 @@
+{
+	"name": "automated-texting",
+	"version": "0.0.0",
+	"scripts": {
+		"build": "tsc",
+		"build:production": "npm run prestart && npm prune --production",
+		"watch": "tsc --w",
+		"prestart": "npm run build && func extensions install",
+		"start:host": "func start",
+		"start": "npm-run-all --parallel start:host watch",
+		"test": "echo \"No tests yet...\""
+	},
+	"description": "",
+	"dependencies": {
+		"@google-cloud/local-auth": "^1.0.0",
+		"dotenv": "^8.2.0",
+		"durable-functions": "^1.4.4",
+		"express": "^4.17.1",
+		"googleapis": "^66.0.0",
+		"mongoose": "^5.11.9",
+		"server-destroy": "^1.0.1"
+	},
+	"devDependencies": {
+		"@azure/functions": "^1.0.1-beta1",
+		"npm-run-all": "^4.1.5",
+		"@types/dotenv": "^8.2.0",
+		"@types/node": "^14.14.16",
+		"rxjs": "^6.6.3",
+		"typescript": "^3.3.3"
+	}
+}
