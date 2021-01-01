@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from './shared/models/user';
@@ -16,5 +16,12 @@ export class SmsService {
 
   saveUser(user: User): Observable<any> {
     return this.http.post<User>(`${this.api}/user`, user);
+  }
+
+  getAttendance(course_id: string) {
+    const daf = new HttpParams().set('course', course_id);
+    return this.http.get<User[]>(this.api + '/lecturer/attendance', {
+      params: daf,
+    });
   }
 }

@@ -8,6 +8,14 @@
 			}
 		}
 	},
+	"extensions": {
+		"http": {
+			"routePrefix": ""
+		},
+		"durableTask": {
+			"hubName": "DurableFunctionsHub"
+		}
+	},
 	"extensionBundle": {
 		"id": "Microsoft.Azure.Functions.ExtensionBundle",
 		"version": "[1.*, 2.0.0)"

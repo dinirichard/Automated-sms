@@ -1,4 +1,4 @@
-import { AzureFunction, Context, HttpRequest } from '@azure/functions';
+import { IOrchestrationFunctionContext } from 'durable-functions/lib/src/classes';
 
 import * as path from 'path';
 import { google, people_v1 } from 'googleapis';
@@ -10,10 +10,9 @@ const people = google.people('v1');
 
 let contacts: Contact[];
 
-const httpTrigger: AzureFunction = async function (
-	context: Context,
-	req: HttpRequest
-): Promise<any> {
+const httpTrigger = async function (
+	context: IOrchestrationFunctionContext
+): Promise<Contact[]> {
 	context.log('Get Contacts from Google');
 	// Obtain user credentials to use for the request
 	context.log(path.join(__dirname, '..', '..', 'shared', 'oauth2.keys.json'));
@@ -21,9 +20,7 @@ const httpTrigger: AzureFunction = async function (
 		keyfilePath: path.join(__dirname, '..', '..', 'shared', 'oauth2.keys.json'),
 		scopes: ['https://www.googleapis.com/auth/contacts.readonly']
 	});
-	// context.res {
-	//     body: google.options({ auth });
-	// };
+
 	google.options({ auth });
 
 	// List all user connections / contacts
@@ -62,8 +59,8 @@ const httpTrigger: AzureFunction = async function (
 	};
 
 	// context.log("\n\nUser's Connections:\n", connections);
-	contacts.forEach((c) => context.log(c));
-	return of(contacts);
+	// contacts.forEach((c) => context.log(c));
+	return contacts;
 };
 
 export default httpTrigger;

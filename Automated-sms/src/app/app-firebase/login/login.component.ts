@@ -4,6 +4,7 @@ import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY } from 'rxjs';
 import { take, catchError } from 'rxjs/operators';
+import { SmsService } from 'src/app/sms.service';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
     private readonly auth: AuthService,
     private readonly router: Router,
     private toastr: ToastrService,
-    private authService: SocialAuthService
+    private authService: SocialAuthService,
+    private smsService: SmsService
   ) {}
 
   loggedIn: boolean;
@@ -31,6 +33,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.auth.loginViaGoogle().subscribe((res) => console.log(res));
+    // this.auth.loginViaGoogle().subscribe((res) => console.log(res));
+    this.smsService.getAttendance('param1').subscribe((res) => {
+      console.log(res, 'res');
+    });
   }
 }
