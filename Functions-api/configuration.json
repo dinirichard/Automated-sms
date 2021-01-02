@@ -1,0 +1,25 @@
+{
+	"Custom": {
+		"accountName": "cosmos-mongodb-serverless",
+		"databaseName": "automated-sms",
+		"connectionString": "mongodb://cosmos-mongodb-serverless:5IKf2VrQr3XuOEdp8sdKnFaNwtNi1hGJvP88P6pfA1eVFmR6D5BDkjSiCnRVd0VMHHd2uR9hONHrCxARBWvSaw==@cosmos-mongodb-serverless.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@cosmos-mongodb-serverless@",
+		"key": "5IKf2VrQr3XuOEdp8sdKnFaNwtNi1hGJvP88P6pfA1eVFmR6D5BDkjSiCnRVd0VMHHd2uR9hONHrCxARBWvSaw==",
+		"port": 10255,
+		"client_id": "541656524796-6qaf231al2errjj4hk1op383vng3fmep.apps.googleusercontent.com",
+		"project_id": "domainkeys",
+		"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+		"token_uri": "https://oauth2.googleapis.com/token",
+		"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+		"client_secret": "KlOk-WSuClZ_1ICA6-W2KHCH",
+		"javascript_origins": [
+			"http://localhost:4200",
+			"http://127.0.0.1",
+			"http://127.0.0.1:4200"
+		],
+		"redirect_uris": ["http://localhost:4200"],
+		"Host": {
+			"LocalHttpPort": 7071,
+			"CORS": "*"
+		}
+	}
+}

@@ -8,6 +8,17 @@
 			}
 		}
 	},
+	"extensions": {
+		"http": {
+			"routePrefix": ""
+		},
+		"durableTask": {
+			"hubName": "DurableFunctionsHub",
+			"storageProvider": {
+				"connectionStringName": "DefaultEndpointsProtocol=https;AccountName=storageaccountafric9723;AccountKey=hoyoC+DeEzu3ITROjlRiUDwmAICFOKd8GTUlHd8FagPeS/6l1UbJ89AHOj9tvTp/Ad84lUVeQc+AvrQSX68eBQ==;EndpointSuffix=core.windows.net"
+			}
+		}
+	},
 	"extensionBundle": {
 		"id": "Microsoft.Azure.Functions.ExtensionBundle",
 		"version": "[1.*, 2.0.0)"
