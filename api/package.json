@@ -12,7 +12,6 @@
 	"dependencies": {
 		"@google-cloud/local-auth": "^1.0.0",
 		"dotenv": "^8.2.0",
-		"durable-functions": "^1.4.4",
 		"express": "^4.17.1",
 		"googleapis": "^66.0.0",
 		"mongoose": "^5.11.9",

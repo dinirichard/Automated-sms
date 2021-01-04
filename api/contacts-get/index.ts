@@ -1,19 +1,22 @@
-import { IOrchestrationFunctionContext } from 'durable-functions/lib/src/classes';
+import { AzureFunction, Context, HttpRequest } from '@azure/functions';
 
 import * as path from 'path';
 import { google, people_v1 } from 'googleapis';
 import { authenticate } from '@google-cloud/local-auth';
 import { of } from 'rxjs';
 import { Contact, transformContactData } from '../shared/models/contact';
+import { ContactService } from '../shared/services/contact.service';
 
 const people = google.people('v1');
-
 let contacts: Contact[];
+const contactService = new ContactService();
 
-const httpTrigger = async function (
-	context: IOrchestrationFunctionContext
-): Promise<Contact[]> {
+const httpTrigger: AzureFunction = async function (
+	context: Context,
+	req: HttpRequest
+): Promise<any> {
 	context.log('Get Contacts from Google');
+
 	// Obtain user credentials to use for the request
 	context.log(path.join(__dirname, '..', '..', 'shared', 'oauth2.keys.json'));
 	const auth = await authenticate({
@@ -22,6 +25,17 @@ const httpTrigger = async function (
 	});
 
 	google.options({ auth });
+
+	let email;
+	if (req.body) {
+		email = req.body.email;
+		context.log('Email is: ', email);
+	} else {
+		return (context.res = {
+			status: 400,
+			body: 'User email was not provided'
+		});
+	}
 
 	// List all user connections / contacts
 	// https://developers.google.com/people/api/rest/v1/people.connections
@@ -52,15 +66,16 @@ const httpTrigger = async function (
 		});
 
 	contacts = transformContactData(connections);
-
 	context.res = {
 		status: 200 /* Defaults to 200 */,
 		body: contacts
 	};
 
+	const res = await contactService.saveContact(context);
+
 	// context.log("\n\nUser's Connections:\n", connections);
 	// contacts.forEach((c) => context.log(c));
-	return contacts;
+	return of(res);
 };
 
 export default httpTrigger;

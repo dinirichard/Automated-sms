@@ -14,7 +14,7 @@ const contactSchema = new Schema(
 	}
 );
 
-export const ContactModel = mongoose.model('Contact', contactSchema);
+export const ContactModel = mongoose.model('Contacts', contactSchema);
 
 export interface ContactDoc extends mongoose.Document {
 	name: String;

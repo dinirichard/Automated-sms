@@ -1,11 +1,18 @@
 {
 	"bindings": [
 		{
-			"type": "activityTrigger",
+			"authLevel": "anonymous",
+			"type": "httpTrigger",
 			"direction": "in",
-			"name": "context"
+			"name": "req",
+			"methods": ["get", "post"],
+			"route": "contacts-get"
+		},
+		{
+			"type": "http",
+			"direction": "out",
+			"name": "res"
 		}
 	],
-	"scriptFile": "../dist/contacts-get/index.js",
-	"disabled": false
+	"scriptFile": "../dist/contacts-get/index.js"
 }

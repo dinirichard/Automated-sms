@@ -10,85 +10,100 @@ export class ContactService {
 	user: UserDoc;
 	userService: UserService;
 	contacts: Contact[];
-	contactModel;
 
-	constructor(context: Context) {
+	constructor() {
 		this.userService = new UserService();
-		async () =>
-			await this.userService
-				.getUser(context)
-				.then(async (res) => (this.user = await res))
-				.catch((err) => {});
-
-		this.contacts = context.req.body.contact;
-		// this.contactModel = res :mongoose.Model<ContactDoc>;
-		this.mongoRun(async (context: Context, next) => {
-			await connect()
-				.then(() => context.log('Connection to CosmosDB successful'))
-				.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
-
-			await next();
-		});
 	}
 
 	mongoRun(context) {}
 
-	async getContacts(context: Context) {
-		await this.user.populate('contacts').execPopulate();
+	async getContacts(context: Context): Promise<Contact[]> {
+		await connect()
+			.then(() => context.log('Connection to CosmosDB successful'))
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
 
-		context.res = {
-			status: 200,
-			body: this.user.contacts.map((x) => {
-				return {
-					name: x.name,
-					emailAddresses: x.emailAddresses,
-					phoneNumbers: x.phoneNumbers
-				} as Contact;
-			})
-		};
-	}
-
-	async saveContact(context: Context) {
-		const contactsModels: ContactDoc[] = await this.contacts.map((contact) => {
-			let result: ContactDoc = null;
-			const newContact = new ContactModel({
-				name: contact.name,
-				emailAddresses: contact.emailAddresses,
-				phoneNumbers: contact.phoneNumbers,
-				owners: this.user
+		await this.userService
+			.getUser(context)
+			.then(async (res) => (this.user = await res))
+			.catch((err) => {
+				this.checkServerError(context, err);
 			});
 
-			newContact
-				.save()
-				.then((res) => {
-					result = res as ContactDoc;
-					return res;
-				})
-				.catch((err) => {
-					this.checkServerError(context, err);
-				});
+		await this.user.populate('contacts').execPopulate();
 
-			if (result) {
-				this.user.contacts.push(result);
-				this.user
-					.save()
-					.then((res) => (this.user = res as UserDoc))
-					.catch((err) => this.checkServerError(context, err));
-			}
-
-			return result;
+		const contacts = this.user.contacts.map((x) => {
+			return {
+				id: x.id,
+				name: x.name,
+				emailAddresses: x.emailAddresses,
+				phoneNumbers: x.phoneNumbers,
+				owner: this.user
+			} as Contact;
 		});
 
 		context.res = {
 			status: 200,
-			body: contactsModels.map((x) => {
-				return {
-					name: x.name,
-					emailAddresses: x.emailAddresses,
-					phoneNumbers: x.phoneNumbers
-				} as Contact;
-			})
+			body: contacts
 		};
+
+		return this.contacts;
+	}
+
+	async saveContact(context: Context) {
+		context.log('Env: ', process.env.accountName);
+
+		await connect()
+			.then(() => context.log('Connection to CosmosDB successful'))
+			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
+
+		await this.userService
+			.getUser(context)
+			.then((res) => {
+				this.user = res;
+			})
+			.catch((err) => {
+				this.checkServerError(context, err);
+			});
+
+		this.contacts = context.res.body;
+
+		let contactsModels: ContactDoc[] = [];
+		let result: ContactDoc;
+
+		const newContactDocs: Contact[] = this.contacts.map((contact) => {
+			contact.owner = this.user;
+			return contact;
+		});
+
+		await ContactModel.insertMany(newContactDocs, { ordered: true })
+			.then((res) => {
+				contactsModels = res as ContactDoc[];
+			})
+			.catch((err) => this.checkServerError(context, err));
+
+		contactsModels.forEach((doc) => this.user.contacts.push(doc));
+
+		await this.user
+			.save()
+			.then((res) => (this.user = res as UserDoc))
+			.catch((err) => this.checkServerError(context, err));
+
+		const contactRes: Contact[] = contactsModels.map((x) => {
+			return {
+				id: x.id,
+				name: x.name,
+				emailAddresses: x.emailAddresses,
+				phoneNumbers: x.phoneNumbers,
+				owner: this.user
+			} as Contact;
+		});
+
+		context.res = {
+			status: 200,
+			body: contactRes
+		};
+
+		return contactRes;
 	}
 
 	checkServerError(context: Context, error) {

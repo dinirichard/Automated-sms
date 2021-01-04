@@ -29,6 +29,7 @@ export class UserService {
 	}
 
 	async postUser(context: Context) {
+		context.log('Env: ', process.env.accountName);
 		await connect()
 			.then(() => context.log('Connection to CosmosDB successful'))
 			.catch((err) => context.log(err, 'Connection to CosmosDB NOT successful'));
