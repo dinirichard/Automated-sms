@@ -41,7 +41,8 @@ export class UserService {
 				name: context.req.body.name,
 				firstName: context.req.body.firstName,
 				lastName: context.req.body.lastName,
-				photoUrl: context.req.body.photoUrl
+				photoUrl: context.req.body.photoUrl,
+				setupComplete: false
 			});
 
 			const response = await newUser
@@ -113,7 +114,7 @@ export class UserService {
 			.catch((error) => {
 				context.res = {
 					status: 500,
-					body: error
+					body: { error, message: 'User does not exists' }
 				};
 				return null;
 			});

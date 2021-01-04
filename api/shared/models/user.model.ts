@@ -11,6 +11,7 @@ const userSchema = new Schema(
 		lastName: String,
 		name: String,
 		photoUrl: String,
+		setupComplete: Boolean,
 		contacts: [{ type: Schema.Types.ObjectId, ref: 'Contact' }]
 	},
 	{
@@ -26,5 +27,6 @@ export interface UserDoc extends mongoose.Document {
 	lastName: string;
 	name: string;
 	photoUrl: string;
+	setupComplete: boolean;
 	contacts: ContactDoc[];
 }

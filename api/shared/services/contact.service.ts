@@ -75,7 +75,7 @@ export class ContactService {
 			return contact;
 		});
 
-		await ContactModel.insertMany(newContactDocs, { ordered: true })
+		await ContactModel.insertMany(newContactDocs, { ordered: false })
 			.then((res) => {
 				contactsModels = res as ContactDoc[];
 			})
