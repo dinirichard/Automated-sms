@@ -18,7 +18,7 @@ import { environment } from '../environments/environment';
 import { AppSetupComponent } from './app-firebase/app-setup/app-setup.component';
 
 const googleLoginOptions = {
-  scope: 'profile email openid contacts contacts-other',
+  scope: 'profile email openid',
 };
 
 @NgModule({

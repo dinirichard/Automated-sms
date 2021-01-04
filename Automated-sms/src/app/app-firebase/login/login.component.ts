@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { ToastrService } from 'ngx-toastr';
 import { EMPTY } from 'rxjs';
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly auth: AuthService,
     private readonly router: Router,
+    private route: ActivatedRoute,
     private toastr: ToastrService,
     private authService: SocialAuthService,
     private smsService: SmsService
@@ -32,10 +33,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login() {
-    // this.auth.loginViaGoogle().subscribe((res) => console.log(res));
-    this.smsService.getAttendance('param1').subscribe((res) => {
-      console.log(res, 'res');
-    });
+  async login() {
+    await this.auth
+      .loginViaGoogle()
+      .then((res) => {
+        console.log(res);
+        this.router.navigate(['setup'], { relativeTo: this.route });
+      })
+      .catch((err) => console.log(err));
+    // this.smsService.getAttendance('param1').subscribe((res) => {
+    //   console.log(res, 'res');
+    // });
   }
 }

@@ -15,28 +15,19 @@ import { User } from '../shared/models/user';
   providedIn: 'root',
 })
 export class AuthService {
-  // private user: BehaviorSubject<
-  //   Observable<firebase.default.User>
-  // > = new BehaviorSubject<Observable<firebase.default.User>>(null);
-  // user$ = this.user
-  //   .asObservable()
-  //   .pipe(switchMap((user: Observable<firebase.default.User>) => user));
   user: SocialUser;
 
   constructor(
     private authService: SocialAuthService,
     private toastr: ToastrService,
     private smsService: SmsService
-  ) {
-    // this.user.next(this.afAuth.authState);
-  }
+  ) {}
 
-  loginViaGoogle(): void {
-    this.authService
+  async loginViaGoogle(): Promise<SocialUser> {
+    await this.authService
       .signIn(GoogleLoginProvider.PROVIDER_ID)
       .then((user: SocialUser) => {
         this.user = user;
-        console.log(user, 'User details');
         this.toastr.success(`Welcome ${user.firstName}`, 'Login Successful');
         const newUser: User = {
           email: user.email,
@@ -45,9 +36,7 @@ export class AuthService {
           name: user.name,
           photoUrl: user.photoUrl,
         };
-        this.smsService.saveUser(newUser).subscribe((res) => {
-          console.log(res, 'res');
-        });
+        this.smsService.saveUser(newUser);
       })
       .catch((error) => {
         this.toastr.error(error.message, 'Error Message', {
@@ -56,7 +45,7 @@ export class AuthService {
         console.log('error');
       });
 
-    // return of(this.user);
+    return this.user;
   }
 
   signOut(): void {
@@ -74,16 +63,4 @@ export class AuthService {
       // this.loggedIn = (user != null);
     });
   }
-
-  // loginViaGoogle(): Observable<firebase.default.auth.UserCredential> {
-  //   return from(
-  //     this.afAuth.signInWithPopup(
-  //       new firebase.default.auth.GoogleAuthProvider()
-  //     )
-  //   );
-  // }
-
-  // logout(): Observable<void> {
-  //   return from(this.afAuth.signOut());
-  // }
 }
