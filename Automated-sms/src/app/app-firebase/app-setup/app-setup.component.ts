@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SmsService } from 'src/app/sms.service';
 
 @Component({
   selector: 'app-app-setup',
@@ -7,11 +8,16 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./app-setup.component.scss'],
 })
 export class AppSetupComponent implements OnInit {
-  isLinear = false;
+  isLinear = true;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  constructor() {}
+  constructor(private smsService: SmsService) {}
 
   ngOnInit(): void {}
+
+  getContacts() {
+    console.log('Clicked');
+    this.smsService.getContacts();
+  }
 }

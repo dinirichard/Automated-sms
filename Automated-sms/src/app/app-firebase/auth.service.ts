@@ -9,6 +9,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { SmsService } from '../sms.service';
 import { User } from '../shared/models/user';
+import { Contact } from '../shared/models/contact';
 // import {from} from 'rxjs';
 
 @Injectable({
@@ -16,6 +17,7 @@ import { User } from '../shared/models/user';
 })
 export class AuthService {
   user: SocialUser;
+  contacts: Contact[];
 
   constructor(
     private authService: SocialAuthService,
@@ -36,7 +38,15 @@ export class AuthService {
           name: user.name,
           photoUrl: user.photoUrl,
         };
-        this.smsService.saveUser(newUser);
+        this.smsService.saveUser(newUser).subscribe((res) => {
+          console.log('User Res', res);
+          localStorage.setItem('email', res.email);
+          localStorage.setItem('userId', res.id);
+          localStorage.setItem('names', res.name);
+          localStorage.setItem('setupComplete', res.setupComplete);
+          this.smsService.contacts = res.contacts;
+          console.log('Contacts: ', this.smsService.contacts);
+        });
       })
       .catch((error) => {
         this.toastr.error(error.message, 'Error Message', {
