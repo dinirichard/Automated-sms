@@ -1,7 +1,7 @@
 import { Context } from '@azure/functions';
 import { ContactModel, ContactDoc } from '../models/contact.model';
 import { UserService } from '../services/user.service';
-import { User, UserDoc } from '../models/user.model';
+import { UserDoc } from '../models/user.model';
 import { connect } from '../mongo';
 import * as mongoose from 'mongoose';
 import { Contact } from '../models/contact';
@@ -37,7 +37,7 @@ export class ContactService {
 				name: x.name,
 				emailAddresses: x.emailAddresses,
 				phoneNumbers: x.phoneNumbers,
-				owner: this.user
+				owner: this.user.id
 			} as Contact;
 		});
 
@@ -94,7 +94,7 @@ export class ContactService {
 				name: x.name,
 				emailAddresses: x.emailAddresses,
 				phoneNumbers: x.phoneNumbers,
-				owner: this.user
+				owner: this.user.id
 			} as Contact;
 		});
 

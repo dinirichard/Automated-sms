@@ -19,7 +19,7 @@ const userSchema = new Schema(
 	}
 );
 
-export const User = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model('User', userSchema);
 
 export interface UserDoc extends mongoose.Document {
 	email: string;

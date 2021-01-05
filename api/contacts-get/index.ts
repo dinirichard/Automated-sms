@@ -52,7 +52,6 @@ const httpTrigger: AzureFunction = async function (
 		.then((response) => {
 			totalPeople = response.data.totalPeople;
 			connections = response.data.connections as people_v1.Schema$Person[];
-			return connections;
 		})
 		.catch((err) => {
 			context.res = {
@@ -75,7 +74,7 @@ const httpTrigger: AzureFunction = async function (
 
 	// context.log("\n\nUser's Connections:\n", connections);
 	// contacts.forEach((c) => context.log(c));
-	return of(res);
+	return res;
 };
 
 export default httpTrigger;

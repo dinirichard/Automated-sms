@@ -14,13 +14,13 @@ const httpTrigger: AzureFunction = async function (
 			status: 200,
 			body: userResponse
 		};
-		return of(context.res.body);
+		return userResponse;
 	} else {
 		context.res = {
 			status: 400,
 			body: 'Please pass a User in the request body'
 		};
-		return of(context.res);
+		return context.res;
 	}
 };
 

@@ -15,7 +15,7 @@ const httpTrigger: AzureFunction = async function (
 	// 	  name +
 	// 	  '. This HTTP triggered function executed successfully.'
 	// 	: 'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.';
-	const users = await userService.getUsers(context);
+	const users = await userService.getAllUsers(context);
 	context.res = {
 		status: 200 /* Defaults to 200 */,
 		body: users

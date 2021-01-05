@@ -7,7 +7,7 @@ export class Contact {
 	name: string;
 	emailAddresses: string[];
 	phoneNumbers: string[];
-	owner: UserDoc;
+	owner: string | UserDoc;
 
 	constructor(data?: people_v1.Schema$Person, document?: ContactDoc) {
 		if (data.hasOwnProperty('names')) {
