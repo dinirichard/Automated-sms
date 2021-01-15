@@ -16,13 +16,14 @@ import {
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { environment } from '../environments/environment';
 import { AppSetupComponent } from './app-firebase/app-setup/app-setup.component';
+import { SlicePipe } from './shared/slice.pipe';
 
 const googleLoginOptions = {
   scope: 'profile email openid',
 };
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, AppSetupComponent],
+  declarations: [AppComponent, LoginComponent, AppSetupComponent, SlicePipe],
   imports: [
     BrowserModule,
     AppRoutingModule,

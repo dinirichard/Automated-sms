@@ -1,17 +1,38 @@
-<mat-horizontal-stepper [linear]="isLinear" #stepper>
-  <mat-step [stepControl]="firstFormGroup">
+<mat-horizontal-stepper linear #stepper>
+  <mat-step label="getContacts" completed=getContactsStep>
 
     <div class="get-contacts">
       <h2>This App needs Access to your Google Contact list</h2>
-      <button (click)="getContacts()"> Get Google Contacts</button>
+      <button (click)="getContacts(stepper)"> Get Google Contacts</button>
     </div>
 
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step label="Review Contacts" completed=reviewContactsStep>
+    <div class="get-contacts">
+      <h2>List of contactss gotten from Google</h2>
+    </div>
 
+    <div class="contact-list">
+      <mat-list>
+        <mat-list-item *ngFor="let contact of contactsByPhonenumbers | slice : 0 : 6">
+          <div class="contact">
+            <div class="contact__name">
+              {{contact.name}}
+            </div>
+            <div class="contact__num">
+              {{contact.phoneNumbers}}
+            </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <mat-paginator [length]="contactsByPhonenumbers.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = $event">
+    </mat-paginator>
 
   </mat-step>
-  <mat-step>
+  <mat-step label="Complete">
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>

@@ -25,12 +25,13 @@ export class SmsService {
     console.log('Clicked');
     const email = localStorage.getItem('email');
     console.log('Clicked', email);
-    return this.http.post<Contact[]>(`${this.api}/contacts-get`, email).pipe(
-      tap((res) => {
-        this.contacts = res;
-        console.log('Contacts: ', this.contacts);
-        return this.contacts;
-      })
-    );
+    return this.http.post<Contact[]>(`${this.api}/contacts-get`, { email });
+    // .pipe(
+    //   tap((res) => {
+    //     this.contacts = res;
+    //     console.log('Contacts: ', this.contacts);
+    //     return this.contacts;
+    //   })
+    // );
   }
 }
